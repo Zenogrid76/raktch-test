@@ -1,16 +1,103 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow">
-    <h1 class="text-2xl font-bold mb-4">Welcome, {{ user_email }}!</h1>
-    <p class="mb-4">This is your dashboard.</p>
+<div class="max-w-6xl mx-auto mt-10 p-6 bg-white rounded shadow">
+    <h1 class="text-2xl font-bold mb-6">Welcome, {{ user_email }}!</h1>
 
- <form method="post" action="{% url 'logout_page' %}">
-    {% csrf_token %}
-    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded">
-        Logout
-    </button>
-</form>
+    <!-- Employees List -->
+    <h2 class="text-xl font-semibold mb-4">Employees</h2>
+    <table class="w-full table-auto border-collapse border border-gray-300 mb-6">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border p-2">Name</th>
+                <th class="border p-2">Email</th>
+                <th class="border p-2">Phone</th>
+                <th class="border p-2">Address</th>
+                <th class="border p-2">Department</th>
+                <th class="border p-2">Achievements</th>
+                <th class="border p-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in employees %}
+            <tr>
+                <td class="border p-2">{{ emp.name }}</td>
+                <td class="border p-2">{{ emp.email }}</td>
+                <td class="border p-2">{{ emp.phone }}</td>
+                <td class="border p-2">{{ emp.address }}</td>
+                <td class="border p-2">{{ emp.department.name }}</td>
+                <td class="border p-2">
+                    {% for ach in emp.achievements.all %}
+                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">{{ ach.name }}</span>
+                    {% empty %}
+                    <span class="text-gray-500 text-sm">No achievements</span>
+                    {% endfor %}
+                </td>
+                <td class="border p-2">
+                    <a href="{% url 'update_employee' emp.id %}" class="text-blue-600 hover:underline">Edit</a> |
+                    <form method="post" action="{% url 'delete_employee' emp.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit"
+                            onclick="return confirm('Are you sure you want to delete this employee?');"
+                            class="text-red-600 hover:underline bg-none border-none p-0">
+                            Delete
+                        </button>
+                    </form>
 
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-gray-500 p-4">No employees yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add New Employee -->
+    {% if error %}
+    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+        {{ error }}
+    </div>
+    {% endif %}
+    <h2 class="text-xl font-semibold mb-4">Add New Employee</h2>
+    <form method="post" class="mb-10">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="employee">
+        <div class="grid grid-cols-2 gap-4">
+            <input type="text" name="employee_name" placeholder="Name" class="border p-2 rounded" required>
+            <input type="email" name="employee_email" placeholder="Email" class="border p-2 rounded" required>
+            <input type="text" name="employee_phone" placeholder="Phone" class="border p-2 rounded">
+            <input type="text" name="employee_address" placeholder="Address" class="border p-2 rounded">
+            <select name="department" class="border p-2 rounded" required>
+                <option value="">-- Select Department --</option>
+                {% for dept in departments %}
+                <option value="{{ dept.id }}">{{ dept.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Add
+            Employee</button>
+    </form>
+
+    <!-- Add Department -->
+    <h2 class="text-xl font-semibold mb-4">Add Department</h2>
+    <form method="post" class="mb-10">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="department">
+        <input type="text" name="department_name" placeholder="Department Name" class="border p-2 rounded" required>
+        <button type="submit" class="ml-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800">Add
+            Department</button>
+    </form>
+
+    <!-- Add Achievement -->
+    <h2 class="text-xl font-semibold mb-4">Add Achievement</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="achievement">
+        <input type="text" name="achievement_name" placeholder="Achievement Name" class="border p-2 rounded" required>
+        <button type="submit" class="ml-2 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-800">Add
+            Achievement</button>
+    </form>
 </div>
 {% endblock %}

@@ -96,11 +96,3 @@ class LoginPage(View):
         else:
             return render(request, "login.html", {"error": "Invalid credentials"})
 
-# Dashboard page
-class DashboardPage(View):
-    def get(self, request):
-        access_token = request.session.get("access")
-        if not access_token:
-            return redirect("login_page")
-        user_email = request.session.get("user_email", "User")
-        return render(request, "dashboard.html", {"user_email": user_email})

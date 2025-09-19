@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded shadow">
+    <h1 class="text-2xl font-bold mb-6">Update Employee: {{ employee.name }}</h1>
+
+    {% if error %}
+    <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="grid grid-cols-2 gap-4">
+            <input type="text" name="employee_name" value="{{ employee.name }}" class="border p-2 rounded" required>
+            <input type="email" name="employee_email" value="{{ employee.email }}" class="border p-2 rounded" required>
+            <input type="text" name="employee_phone" value="{{ employee.phone }}" class="border p-2 rounded">
+            <input type="text" name="employee_address" value="{{ employee.address }}" class="border p-2 rounded">
+            
+            <select name="department" class="border p-2 rounded" required>
+                {% for dept in departments %}
+                <option value="{{ dept.id }}" {% if dept.id == employee.department.id %}selected{% endif %}>
+                    {{ dept.name }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="employee_achievements" multiple class="border p-2 rounded">
+                {% for ach in achievements %}
+                <option value="{{ ach.id }}" {% if ach in employee.achievements.all %}selected{% endif %}>
+                    {{ ach.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800">Update Employee</button>
+    </form>
+</div>
+{% endblock %}
