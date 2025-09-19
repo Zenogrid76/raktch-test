@@ -15,32 +15,11 @@ The project showcases proficiency in:
 ## ✨ Key Features
 
 ### 🔐 Authentication & Security
-- **JWT-based Authentication** for secure API access
-- User registration and login system
-- Token-based session management
-- Password validation and security enforcement
-
 ### 👥 Employee Management
-- **Complete CRUD Operations** for employee records
-- Employee profile management with detailed information
-- Department assignment and tracking
-- Achievement assignment system
-
 ### 🏢 Department Management
-- Create and manage organizational departments
-- Assign employees to specific departments
-- Department-based employee filtering and organization
-
 ### 🏆 Achievement System
-- Create and manage employee achievements
-- **Multiple achievements per employee** support
-- Track employee accomplishments and milestones
-
 ### 🎨 User Interface
-- Clean, responsive dashboard interface
-- Intuitive navigation and user experience
-- Error handling with user-friendly messages
-- Mobile-responsive design
+
 
 
 ## 🚀 Quick Start
